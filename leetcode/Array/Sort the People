@@ -1,0 +1,14 @@
+public static String[] sortPeople(String[] names, int[] heights) {
+    String[] result = new String[names.length];
+    Map<Integer, String> map = new TreeMap<>();
+    for (int i = 0; i < heights.length; i++) {
+        map.put(heights[i], names[i]);
+    }
+    int size = heights.length - 1;
+    for (Map.Entry<Integer, String> set : map.entrySet()) {
+        result[size] = set.getValue();
+        size--;
+    }
+
+    return result;
+}
