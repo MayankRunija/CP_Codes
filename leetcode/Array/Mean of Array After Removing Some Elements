@@ -1,0 +1,17 @@
+class Solution {
+    public double trimMean(int[] arr) {
+      Arrays.sort(arr);
+      
+      int items = (int) (arr.length * 0.05);
+	  int end = arr.length - items;
+	  int totalItems = arr.length - items * 2;
+
+      var sum = 0;
+
+      for (int i = items; i < end; i++) {
+        sum += arr[i];
+	  }
+
+      return (double) sum / totalItems;        
+    }
+}
