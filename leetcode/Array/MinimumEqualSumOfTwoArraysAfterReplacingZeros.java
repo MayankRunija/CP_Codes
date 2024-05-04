@@ -1,34 +1,31 @@
-import java.util.List;
+class Solution {
+    public long minSum(int[] nums1, int[] nums2) {
+        long sum1 = 0, sum2 = 0;
+        int zeroCounts1 = 0, zeroCounts2 = 0;
+        for (int i = 0; i < nums1.length; i++) {
+            sum1 += nums1[i];
+            if (nums1[i] == 0) {
+                sum1++;
+                zeroCounts1++;
+            }        
+        }
+        for (int i = 0; i < nums2.length; i++) {
+            sum2 += nums2[i];
+            if (nums2[i] == 0) {
+                sum2++;
+                zeroCounts2++;
+            }        
+        }
 
-public class Solution {
-    public long minSum(List<Integer> v1, List<Integer> v2) {
-        long s1 = 0, s2 = 0;
-        int c1 = 0, c2 = 0;
-        int n = v1.size(), m = v2.size();
-        for (int i : v1) {
-            if (i == 0)
-                c1++;
-            s1 += i;
-        }
-        for (int i : v2) {
-            if (i == 0)
-                c2++;
-            s2 += i;
-        }
-        s1 = s1 + c1;
-        s2 = s2 + c2;
-        if (s2 > s1) {
-            long temp = s1;
-            s1 = s2;
-            s2 = temp;
-            int tempCount = c1;
-            c1 = c2;
-            c2 = tempCount;
-        }
-        if (s1 != s2 && c1 == 0 && c2 == 0)
+        if(sum1==sum2) return sum1;        
+        
+        if (sum2>sum1 && zeroCounts1 == 0)
             return -1;
-        if (s1 != s2 && c2 == 0)
+
+        if (sum1 > sum2 && zeroCounts2 == 0)
             return -1;
-        return s1;
+
+        
+       return Math.max(sum1,sum2);
     }
 }
