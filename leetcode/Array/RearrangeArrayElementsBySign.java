@@ -1,21 +1,19 @@
-public class Solution {
-    public int[] rearrangeArray(int[] nums) {
-        List<Integer> v1 = new ArrayList<>();
-        List<Integer> v2 = new ArrayList<>();
-        List<Integer> v3 = new ArrayList<>();
+class Solution {
+    public int[] rearrangeArray(int[] a) {
+        int n=a.length;
+        int []ans=new int[n];
+       int posIndex=0,negIndex=1;
+       for(int i=0;i<n;i++){
+           if(a[i]>0){
+               ans[posIndex]=a[i];
+               posIndex+=2;
+           }
+           else{
+               ans[negIndex]=a[i];
+               negIndex+=2;
+           }
+       }
+       return ans;
 
-        for (int i = 0; i < nums.length; i++) {
-            if (nums[i] > 0) {
-                v1.add(nums[i]);
-            } else {
-                v2.add(nums[i]);
-            }
-        }
-        for (int i = 0; i < v1.size(); i++) {
-            v3.add(v1.get(i));
-            v3.add(v2.get(i));
-        }
-
-        return v3.stream().mapToInt(Integer::intValue).toArray();
     }
 }
