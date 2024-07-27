@@ -1,0 +1,116 @@
+class Solution {
+    class Node {
+        Node left;
+        Node right;
+        int l;
+        int r;
+        int max = 0;
+        int ob = Integer.MAX_VALUE;
+        Node(int ll, int rr, int oob) {
+            l = ll;
+            r = rr;
+            ob = oob;
+            max = ob == Integer.MAX_VALUE ? Integer.MAX_VALUE : ob - ll;
+        }
+
+        void print() {
+            System.out.print("[" + l + "-" + r + ": " + ob + ", " + max);
+            if (left != null) {
+                System.out.print(" -- ");
+                left.print();
+                right.print();
+                System.out.print(" -- " + l + "-" + r);
+            }
+            System.out.print("]");
+        }
+    }
+    
+    public List<Boolean> getResults(int[][] queries) {
+        int range = 0;
+        for (int[] q : queries) {
+            if (q[0] == 1) {
+                range = Math.max(range, q[1]);
+            }
+        }
+        Node root = new Node(0, range, Integer.MAX_VALUE);
+        List<Boolean> ans = new ArrayList<>();
+        for (int[] q : queries) {
+            if (q[0] == 1) {
+                add(root, q[1]);
+                // root.print();
+                // System.out.println();
+            } else {
+                int r = q[1] - q[2];
+                // System.out.println("q: " + r + ", " + q[2]);
+                if (r >= root.r) {
+                    ans.add(true);
+                } else {
+                    ans.add(query(root, r, q[2]));
+                }
+            }
+        }
+        return ans;
+    }
+
+    boolean query(Node root, int r, int size) {
+        // System.out.print("here: ");
+        // root.print();
+        // System.out.println(">>> " + r + ", " + size);
+        if (root.left == null && root.right == null) {
+            if (r >= root.r) {
+                return size <= root.max;
+            } else if (r < root.l) {
+                return false;
+            } else {
+                return size <= (root.ob - root.l);
+            }
+        }
+
+        if (root.right.r <= r) {
+            if (root.right.max >= size) {
+                return true;
+            }
+        }
+        if (root.left.r <= r) {
+            if (root.left.max >= size) {
+                return true;
+            }
+        } else {
+            return query(root.left, r, size);
+        }
+        if (root.right.l <= r && root.right.r >= r) {
+            return query(root.right, r, size);
+        }
+
+        return false;
+    }
+
+    int add(Node root, int ob) {
+        if (root.r == root.l) {
+            root.ob = (root.r < ob && ob < root.ob) ? ob : root.ob;
+            root.max = root.ob == Integer.MAX_VALUE ? root.ob : root.ob - root.l;
+            return root.max;
+        }
+        if (ob <= root.l) return root.max;
+        if (ob > root.r) {
+            if (ob < root.ob) {
+                root.ob = ob;
+                if (root.left == null && root.right == null) {
+                    root.max = (ob - root.l);
+                } else {
+                    root.max = Math.max(add(root.left, ob), add(root.right, ob));
+                }
+            }
+            return root.max;
+        }
+        if (root.left != null && root.right != null) {
+            root.max = Math.max(add(root.left, ob), add(root.right, ob));
+            return root.max;
+        }
+        int mid = (root.r - root.l) / 2 + root.l;
+        root.left = new Node(root.l, mid, root.ob);
+        root.right = new Node(mid + 1, root.r, root.ob);
+        root.max = Math.max(add(root.left, ob), add(root.right, ob));
+        return root.max;
+    }
+}
